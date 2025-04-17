@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Socket.io Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CDN -->
+    <style>
+      /* Ensure the content area is scrollable */
+      #content-container {
+        max-height: 70vh; /* This controls the scrollable height of the content */
+        overflow-y: auto; /* Allow vertical scrolling */
+      }
+
+      /* Sticky footer to keep input at the bottom */
+      #input-area {
+        position: sticky;
+        bottom: 0;
+        background-color: white;
+        z-index: 10;
+        padding-top: 16px; /* Make space between the content and input */
+      }
+    </style>
+  </head>
+  <body class="font-sans bg-gray-100 text-gray-800">
+    <div class="flex flex-col items-stretch w-full h-screen">
+      <h1 class="text-4xl font-semibold mb-2 text-center">Chat</h1>
+
+      <div id="area" class="w-full bg-white p-6 rounded-lg shadow-lg flex flex-col h-full">
+        <!-- Main content container where images and messages are displayed -->
+        <div id="content-container" class="mt-6 space-y-4 flex-grow"></div>
+
+        <!-- Input area with sticky positioning -->
+        <div id="input-area" class="w-full">
+          <input id="message" type="text" placeholder="Enter message" class="w-full p-3 mb-4 border border-gray-300 rounded-md" />
+          <input type="file" name="image" id="file-input" class="w-full mb-4" />
+          <button id="submit" type="submit" class="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-700">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const area = document.getElementById("area");
+      const messageInput = document.getElementById("message");
+      const btn = document.getElementById("submit");
+      const fileInput = document.getElementById("file-input");
+      const contentContainer = document.getElementById("content-container");
+
+      // Function to create and append a message div inside a wrapper
+      function createMessageDiv(message, isUserMessage = false) {
+        const wrapperDiv = document.createElement("div");
+        wrapperDiv.classList.add("w-full", "flex", "items-start", "space-x-4", "mb-4");
+
+        const msgDiv = document.createElement("div");
+        msgDiv.classList.add("p-3", "rounded-lg", "max-w-3/4", "flex-grow");
+        if (isUserMessage) {
+          msgDiv.classList.add("bg-blue-400", "text-right", "ml-auto");
+        } else {
+          msgDiv.classList.add("bg-gray-300", "text-left");
+        }
+        msgDiv.innerText = message;
+
+        wrapperDiv.appendChild(msgDiv);
+        contentContainer.appendChild(wrapperDiv); // Append the wrapper to the content container
+
+        // Auto-scroll to the bottom if user is at the bottom
+        scrollToBottom();
+      }
+
+      // Function to create and append an image div inside a wrapper
+      function createImageDiv(imageData) {
+        const wrapperDiv = document.createElement("div");
+        wrapperDiv.classList.add("w-full", "flex", "items-start", "space-x-4", "mb-4");
+
+        const imgDiv = document.createElement("div");
+        imgDiv.classList.add("w-full", "rounded-md", "mt-4", "max-w-lg");
+        const img = document.createElement("img");
+        img.src = imageData;
+        img.classList.add("w-full", "rounded-md");
+        imgDiv.appendChild(img);
+
+        wrapperDiv.appendChild(imgDiv);
+        contentContainer.appendChild(wrapperDiv); // Append the wrapper to the content container
+
+        // Auto-scroll to the bottom if user is at the bottom
+        scrollToBottom();
+      }
+
+      // Function to check if the user is at the bottom of the content container
+      function isAtBottom() {
+        return (
+          contentContainer.scrollHeight - contentContainer.scrollTop ===
+          contentContainer.clientHeight
+        );
+      }
+
+      // Function to scroll the content container to the bottom
+      function scrollToBottom() {
+        if (isAtBottom()) {
+          contentContainer.scrollTop = contentContainer.scrollHeight; // Scroll to the bottom
+        }
+      }
+
+      // Function to send the message (triggered by the button or Enter key)
+      function sendMessage() {
+        const images = fileInput.files[0];
+        const msg = messageInput.value;
+
+        if (images) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const arrayBuffer = event.target.result;
+            socket.emit("image-upload", new Uint8Array(arrayBuffer));
+            fileInput.value = ""; // Clear the file input
+          };
+          reader.readAsArrayBuffer(images); // Read the file as ArrayBuffer
+        }
+
+        if (msg) {
+          socket.emit("user-message", msg);
+          messageInput.value = ""; // Clear the message input
+        }
+      }
+
+      // Send message when the button is clicked
+      btn.addEventListener("click", sendMessage);
+
+      // Listen for the Enter key to send the message
+      messageInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault(); // Prevent default Enter key behavior (like creating a new line)
+          sendMessage(); // Trigger the sendMessage function
+        }
+      });
+
+      // When an image is received, display it first
+      socket.on("image", (imageData) => {
+        createImageDiv(imageData); // Append image div to the wrapper
+      });
+
+      // When a message from the server is received
+      socket.on("message", (message) => {
+        createMessageDiv(message); // Append message div to the wrapper
+      });
+
+      // When a user message is received
+      socket.on("user-message", (message) => {
+        createMessageDiv(message, true); // Append user message div to the wrapper
+      });
+
+      socket.on("file-upload", (file) => {
+        // Log received file data for debugging
+        console.log("Received file:", file);
+
+        // Validate the file data
+        if (!file || !file.data || !file.name) {
+          console.error("Invalid file data:", file);
+          return;
+        }
+
+        const link = document.createElement("a");
+        link.href = file.data; // Make sure this is a valid URL or base64 string
+        link.download = file.name; // The filename for download
+
+        // Log link href and download to confirm
+        console.log("File link href:", link.href);
+        console.log("Download name:", link.download);
+
+        // Append the link to the DOM
+        const messageContainer = document.getElementById("message-container");
+        if (!messageContainer) {
+          console.error("Message container not found");
+          return;
+        }
+
+        // Create a container for the link (optional for styling)
+        const linkContainer = document.createElement("div");
+        linkContainer.appendChild(link);
+
+        link.textContent = file.name; // Set the link text
+
+        // Optionally, add some styling
+        link.classList.add("bg-blue-500", "text-white", "p-2", "rounded");
+
+        // Debugging style to ensure it's visible
+        link.style.border = "2px solid red"; // Temporary debug style
+
+        messageContainer.appendChild(linkContainer);
+      });
+    </script>
+  </body>
+</html>
+
+
+

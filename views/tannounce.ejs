@@ -1,0 +1,52 @@
+ <!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Announcements</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="min-h-screen flex items-center justify-center bg-gray-200 py-12 px-6">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full space-y-6">
+      <h2 class="text-3xl font-semibold text-center text-gray-700">Manage Announcements</h2>
+      
+      <!-- Display Create Announcement Form -->
+      <form action="/teachers/announcement" method="POST" class="space-y-6">
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700">Announcement Title</label>
+          <input type="text" id="title" name="title" required class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter the title of the announcement">
+        </div>
+
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea id="description" name="description" required rows="4" class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter the details of the announcement"></textarea>
+        </div>
+
+        <div class="flex justify-center">
+          <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Create Announcement</button>
+        </div>
+      </form>
+
+      <!-- Display Existing Announcements -->
+      <div class="space-y-4 mt-8">
+        <h3 class="text-xl font-semibold text-gray-700">Existing Announcements</h3>
+        
+        <!-- Loop through announcements and display them -->
+        <% announcements.forEach(announce => { %>
+          <div class="bg-gray-50 border rounded-lg p-4 flex justify-between items-center">
+            <div>
+              <h4 class="font-semibold text-gray-800"><%= announce.title %></h4>
+              <p class="text-gray-600"><%= announce.description %></p>
+            </div>
+            <a href="/teachers/remove/<%= announce._id %>" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700">Remove</a>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+

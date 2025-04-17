@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- TailwindCSS CDN -->
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Header -->
+    <header class="bg-green-600 text-white py-4">
+        <div class="container mx-auto text-center">
+            <h1 class="text-3xl font-semibold">Chat with Teachers</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 p-6 bg-white rounded-lg shadow-lg">
+        <div class="space-y-6">
+            <h2 class="text-2xl font-semibold text-gray-700">Select a Teacher to Chat</h2>
+
+            <!-- Teacher List -->
+            <ul class="space-y-4">
+                <% teachers.forEach(teacher => { %>
+                    <li class="flex justify-between items-center p-4 bg-gray-100 rounded-lg shadow hover:bg-gray-200 transition-all">
+                        <a href="/students/chat/<%= teacher._id %>" class="text-lg font-medium text-green-600 hover:underline">
+                            <%= teacher.name %> - <%= teacher.department %>
+                        </a>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+    </main>
+
+</body>
+</html>
+

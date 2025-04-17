@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMirror Example</title>
+
+    <!-- CodeMirror Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/theme/dracula.min.css"> <!-- Optional theme -->
+
+    <style>
+        .CodeMirror {
+            height: calc(90vh - 4rem);
+        }
+    </style>
+
+    <!-- CodeMirror Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/keymap/vim.min.js"></script>
+
+    <script>
+        window.onload = () => {
+            // Get the language selected by the user
+            const apiBaseUrl = "<%= baseUrl %>";  // Now this is populated from your Express route
+            const languageSelector = document.getElementById("language");
+
+            const editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+                lineNumbers: true,
+                mode: "javascript",
+                theme: "dracula",
+                matchBrackets: true,
+                indentUnit: 4,
+                tabSize: 4,
+                lineWrapping: true,
+                autoCloseBrackets: false,
+                fontSize: "16px",
+                extraKeys: {
+                    "Ctrl-Enter": function() { runCode(); }
+                }
+            });
+
+            languageSelector.addEventListener("change", updateMode);
+
+            // Function to update CodeMirror mode based on selected language
+            function updateMode() {
+                const selectedLanguage = languageSelector.value;
+                let mode;
+
+                switch (selectedLanguage) {
+                    case 'python':
+                        mode = 'python';
+                        break;
+                    case 'c':
+                    case 'cpp':
+                        mode = 'text/x-csrc'; 
+                        break;
+                    default:
+                        mode = 'javascript';
+                        break;
+                }
+
+                editor.setOption("mode", mode);
+            }
+
+            // Handle form submission
+            const form = document.querySelector('form');
+            form.onsubmit = async function (event) {
+                event.preventDefault();
+
+                const code = editor.getValue(); 
+                const language = document.getElementById("language").value;
+                const outputDiv = document.getElementById("output");
+
+                try {
+                    const response = await fetch(`${apiBaseUrl}/students/run-code`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ code, language }),
+                    });
+
+                    const data = await response.json();
+                    outputDiv.textContent = data.output;
+                } catch (error) {
+                    outputDiv.textContent = "Error executing code.";
+                }
+            };
+
+            // Vim toggle button functionality
+            let vimEnabled = false;
+            const toggleVimButton = document.getElementById("toggle-vim");
+            toggleVimButton.addEventListener("click", () => {
+                vimEnabled = !vimEnabled;
+
+                if (vimEnabled) {
+                    editor.setOption("keyMap", "vim");
+                    toggleVimButton.textContent = "Disable Vim Bindings";
+                } else {
+                    editor.setOption("keyMap", "default");
+                    toggleVimButton.textContent = "Enable Vim Bindings";
+                }
+            });
+        };
+    </script>
+</head>
+
+<body class="bg-gray-900 text-white">
+    <!-- Your body content goes here -->
+</body>
+
+</html>
+
+

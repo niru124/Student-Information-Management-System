@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Optional: Add some styles for the preview */
+        .preview {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Notes for Department: <%= notes[0] ? notes[0].department : "N/A" %></h1>
+        
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700">
+                    <th class="py-3 px-4 border-b">Title</th>
+                    <th class="py-3 px-4 border-b">Created At</th>
+                    <th class="py-3 px-4 border-b">Uploaded By</th>
+                    <th class="py-3 px-4 border-b">File Preview</th>
+                    <th class="py-3 px-4 border-b">Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% notes.forEach(note => { %>
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-2 px-4 border-b"><%= note.title %></td>
+                        <td class="py-2 px-4 border-b"><%= new Date(note.createdAt).toLocaleString() %></td>
+                        <td class="py-2 px-4 border-b"><%= note.teacherId ? note.teacherId.name : 'Unknown' %></td>
+                        <td class="py-2 px-4 border-b">
+                            <% if (note.fileUrl) { %>
+                                <img src="/<%= note.fileUrl %>" alt="File Preview" class="preview">
+                            <% } else { %>
+                                No preview available
+                            <% } %>
+                        </td>
+                        <td class="py-2 px-4 border-b">
+                            <a href="/students/uploads/<%= note.fileUrl.split('/').pop() %>" target="_blank" class="text-blue-500 hover:underline">Download</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold mb-2">Additional Information</h2>
+            <div class="bg-white p-4 border rounded-lg shadow-md">
+                <p class="text-gray-700"><strong>Note:</strong> Each note can be uploaded by a different teacher.</p>
+                <p class="text-gray-700"><strong>Description:</strong> <span class="text-gray-500">Description not available yet.</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

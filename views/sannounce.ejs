@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcement</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Keyframe animation for the 'pulse' effect */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Class to apply the pulse effect */
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    /* Class for highlighting the text temporarily */
+    
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Top Announcement Slider with a pulse animation -->
+  <div class="bg-blue-600 text-white py-4 px-8">
+    <div class="pulse text-xl font-semibold">
+      Latest Announcement: <%= announcements[(announcements.length)-1].title %> <!-- Display Latest Announcement Title -->
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-200 py-8 px-6">
+
+    <!-- Loop through the announcements and display them in cards -->
+    <div class="space-y-6 w-full max-w-4xl">
+      <% announcements.forEach(announce => { %>
+        <div class="transform rounded-xl h-auto sm:h-64 w-full bg-white shadow-xl transition duration-300 hover:translate-x-4">
+          <!-- Announcement Card Content -->
+          <div class="flex flex-col h-full justify-between p-6">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+              <%= announce.title %> <!-- Announcement title -->
+            </h2>
+
+            <p class="text-gray-600 mb-4">
+              <%= announce.description %> <!-- Announcement description -->
+            </p>
+
+            <p class="text-xs text-gray-400">
+              Posted on: <%= new Date(announce.createdAt).toLocaleDateString() %> <!-- Format and display the date -->
+            </p>
+
+            <p class="text-sm text-gray-500">
+              Department: <span class="font-medium text-gray-700"><%= announce.department %></span> <!-- Department -->
+            </p>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+
+</body>
+</html>
+

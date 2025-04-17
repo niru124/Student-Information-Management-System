@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Profile Page</title>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+        <div class="flex flex-col items-center">
+            <img src="https://picsum.photos/200" alt="Profile Picture" class="rounded-full w-32 h-32 mb-4">
+            <h1 class="text-2xl font-bold mb-2">User Profile</h1>
+        </div>
+        
+        <form action="/students/edit" method="POST" class="w-full">
+            <% details.forEach((user) => { %>
+            <div class="mt-4">
+                <div class="mb-2">
+                    <span class="font-semibold">Username:</span>
+                    <!-- Add name attribute to input fields -->
+                    <input type="text" name="username" value="<%= user.username %>" class="border border-gray-300 rounded-lg p-2 w-full bg-gray-100" />
+                </div>
+                <div class="mb-2">
+                    <span class="font-semibold">Name:</span>
+                    <input type="text" name="name" value="<%= user.name %>" class="border border-gray-300 rounded-lg p-2 w-full bg-gray-100" />
+                </div>
+                <div class="mb-2">
+                    <span class="font-semibold">Email:</span>
+                    <input type="email" name="email" value="<%= user.email %>" class="border border-gray-300 rounded-lg p-2 w-full bg-gray-100" />
+                </div>
+                <div class="mb-2">
+                    <span class="font-semibold">Phone:</span>
+                    <input type="tel" name="phone" value="<%= user.phone %>" class="border border-gray-300 rounded-lg p-2 w-full bg-gray-100" />
+                </div>
+                <div class="mb-2">
+                    <span class="font-semibold">Phone:</span>
+                    <input type="text" name="department" value="<%= user.department %>" class="border border-gray-300 rounded-lg p-2 w-full bg-gray-100" />
+                </div>
+               <div class="mb-2">
+                    <span class="font-semibold">Password:</span>
+                    <!-- Empty password field, user will input a new password if they want to change it -->
+                    <input type="password" name="password" placeholder="Enter new password (optional)" class="border border-gray-300 rounded-lg p-2 w-full bg-gray-100" />
+                </div>
+            </div>
+            <% }) %>
+
+            <div class="mt-6">
+                <button type="submit" class="block w-full text-center bg-blue-600 text-white font-semibold rounded-lg py-2 hover:bg-blue-500 transition">
+                    Edit Profile
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

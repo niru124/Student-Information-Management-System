@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+        .button-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 2rem; /* Added spacing above buttons */
+        }
+        .link_wrapper {
+            position: relative;
+            margin: 1rem; /* Added margin between buttons */
+        }
+        a {
+            display: block;
+            width: 250px;
+            height: 50px;
+            line-height: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            background: #333;
+            text-align: center;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 3px solid #333;
+            transition: all .35s;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            position: absolute;
+            transform: rotate(45deg);
+            right: 0;
+            top: 0;
+            z-index: -1;
+            transition: all .35s;
+        }
+        .icon svg {
+            width: 30px;
+            position: absolute;
+            top: calc(50% - 15px);
+            left: calc(50% - 15px);
+            transform: rotate(-45deg);
+            fill: #2ecc71;
+            transition: all .35s;
+        }
+        a:hover {
+            width: 200px;
+            border: 3px solid #2ecc71;
+            background: transparent;
+            color: #2ecc71;
+        }
+        a:hover + .icon {
+            border: 3px solid #2ecc71;
+            right: -25%;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50">
+
+    <!-- Header Section -->
+    <header class="bg-gray-800 text-white py-6">
+        <div class="max-w-screen-xl mx-auto px-8 text-center">
+            <h1 class="text-3xl font-bold">Welcome to the Student Information Management System</h1>
+            <p class="mt-2">Manage your academic journey effortlessly.</p>
+        </div>
+    </header>
+
+    <!-- About Us Section -->
+    <section class="py-6 bg-gray-100">
+        <div class="max-w-screen-xl mx-auto px-8 text-center">
+            <h2 class="text-2xl font-bold">About Us</h2>
+            <p class="mt-4 text-gray-700">Our Student Information Management System is designed to simplify the way students manage their academic data. We strive to create a user-friendly platform that enhances the learning experience and supports students in their educational journey.</p>
+        </div>
+    </section>
+
+    <section class="py-6 button-wrapper">
+        <div class="link_wrapper">
+            <a href="/login">Login</a>
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.832 268.832">
+                    <path d="M265.17 125.577l-80-80c-4.88-4.88-12.796-4.88-17.677 0-4.882 4.882-4.882 12.796 0 17.678l58.66 58.66H12.5c-6.903 0-12.5 5.598-12.5 12.5 0 6.903 5.597 12.5 12.5 12.5h213.654l-58.66 58.662c-4.88 4.882-4.88 12.796 0 17.678 2.44 2.44 5.64 3.66 8.84 3.66s6.398-1.22 8.84-3.66l79.997-80c4.883-4.882 4.883-12.796 0-17.678z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="link_wrapper">
+            <a href="/register">Register</a>
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.832 268.832">
+                    <path d="M265.17 125.577l-80-80c-4.88-4.88-12.796-4.88-17.677 0-4.882 4.882-4.882 12.796 0 17.678l58.66 58.66H12.5c-6.903 0-12.5 5.598-12.5 12.5 0 6.903 5.597 12.5 12.5 12.5h213.654l-58.66 58.662c-4.88 4.882-4.88 12.796 0 17.678 2.44 2.44 5.64 3.66 8.84 3.66s6.398-1.22 8.84-3.66l79.997-80c4.883-4.882 4.883-12.796 0-17.678z"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Cards Section -->
+    <section class="overflow-hidden">
+        <div class="max-w-screen-xl 2xl:max-w-screen-3xl px-8 md:px-12 mx-auto py-12 lg:py-24 space-y-24 flex flex-col justify-center">
+            <div class="flex flex-col sm:flex-row mx-auto space-y-6 sm:space-y-0 sm:space-x-6">
+                <!-- Card 1 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <p class="text-lg font-semibold text-center text-gray-800">"The beautiful thing about learning is that no one can take it away from you."</p>
+                        <p class="mt-4 text-sm text-gray-500 text-right">– B.B. King</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <p class="text-lg font-semibold text-center text-gray-800">"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</p>
+                        <p class="mt-4 text-sm text-gray-500 text-right">– Malcolm X</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <p class="text-lg font-semibold text-center text-gray-800">"Learning is a treasure that will follow its owner everywhere."</p>
+                        <p class="mt-4 text-sm text-gray-500 text-right">– Chinese Proverb</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <p class="text-lg font-semibold text-center text-gray-800">"The only limit to our realization of tomorrow will be our doubts of today."</p>
+                        <p class="mt-4 text-sm text-gray-500 text-right">– Franklin D. Roosevelt</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
