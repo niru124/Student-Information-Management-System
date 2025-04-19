@@ -50,7 +50,7 @@ This is a web-based educational portal designed to facilitate interaction and re
 1. **Clone the repository:**
    
    ```bash
-   git clone <your-repository-url>
+   git clone https://github.com/niru124/Student-Information-Management-System.git
    cd prot
    ```
 
